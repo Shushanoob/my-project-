@@ -98,6 +98,29 @@
         opacity: 0;
       }
     }
+
+    .color-controls {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 20px;
+      margin-top: 25px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      color: #fff;
+    }
+
+    .color-controls label,
+    .color-controls select,
+    .color-controls input,
+    .color-controls button {
+      margin: 5px;
+    }
+
+    .color-controls select,
+    .color-controls input[type="color"] {
+      padding: 5px;
+      border-radius: 8px;
+      border: 1px solid #fff;
+    }
   </style>
 </head>
 <body>
@@ -120,23 +143,38 @@
   <div id="message">📬 Нажми на сердечко</div>
   <div id="counter"></div>
   <button onclick="resetCounter()">Обнулить счётчик</button>
-  <br><br>
-  <label for="colorInput" style="color:white">Изменить цвет элемента по ID:</label><br>
-  <input id="colorInput" type="text" placeholder="Например: message">
-  <input id="colorPicker" type="color">
-  <button onclick="changeColor()">Изменить цвет</button>
+
+  <div class="color-controls">
+    <label for="elementSelect">Выбери элемент:</label><br>
+    <select id="elementSelect">
+      <option value="message">Сообщение</option>
+      <option value="counter">Счётчик</option>
+      <option value="mainHeart">Сердечко</option>
+      <option value="heartSection">Фон</option>
+    </select>
+    <input id="colorPicker" type="color">
+    <button onclick="changeColor()">Изменить цвет</button>
+    <button onclick="undoColor()">Отменить</button>
+  </div>
 </div>
 
 <script>
   const messages = [
-    "Я тебя люблю ",
-    "Любимая ",
-    "Солнышко",
-    "Милая",
-    "Я тебя очень мсильно люблю",
-    "Ты самая лучшая на свете"
-    "Дорогая"
+  "Я тебя люблю ",    
+  "Любимая ",     
+  "Солнышко",     
+  "Милая",     
+  "Я тебя очень мсильно люблю",     
+  "Ты самая лучшая на свете"     
+  "Дорогая"
   ];
+
+  const originalColors = {
+    message: "#fff",
+    counter: "#fff",
+    mainHeart: "#fff0f5",
+    heartSection: "#ffb6c1"
+  };
 
   function checkPassword() {
     const input = document.getElementById("passwordInput").value;
@@ -194,18 +232,31 @@
   }
 
   function changeColor() {
-    const elementId = document.getElementById("colorInput").value;
+    const elementId = document.getElementById("elementSelect").value;
     const color = document.getElementById("colorPicker").value;
     const element = document.getElementById(elementId);
-    if (element) {
-      element.style.color = color;
+    if (elementId === "mainHeart") {
+      element.querySelector("path").setAttribute("fill", color);
+    } else if (elementId === "heartSection") {
+      element.style.backgroundColor = color;
     } else {
-      alert("Элемент с таким ID не найден.");
+      element.style.color = color;
+    }
+  }
+
+  function undoColor() {
+    const elementId = document.getElementById("elementSelect").value;
+    const defaultColor = originalColors[elementId];
+    const element = document.getElementById(elementId);
+    if (elementId === "mainHeart") {
+      element.querySelector("path").setAttribute("fill", defaultColor);
+    } else if (elementId === "heartSection") {
+      element.style.backgroundColor = defaultColor;
+    } else {
+      element.style.color = defaultColor;
     }
   }
 </script>
 
 </body>
-</html>
-
 </html>
