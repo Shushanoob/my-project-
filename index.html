@@ -164,7 +164,7 @@
   "Любимая ",     
   "Солнышко",     
   "Милая",     
-  "Я тебя очень мсильно люблю",     
+  "Я тебя очень сильно люблю",     
   "Ты самая лучшая на свете"     
   "Дорогая"
   ];
@@ -177,13 +177,25 @@
   };
 
   function checkPassword() {
-    const input = document.getElementById("passwordInput").value;
-    if (input === "0129") {
-      document.getElementById("passwordSection").style.display = "none";
-      document.getElementById("heartSection").style.display = "block";
+  const input = document.getElementById("passwordInput");
+  const password = input ? input.value : "";
+  const errorMsg = document.getElementById("errorMsg");
+  const passwordSection = document.getElementById("passwordSection");
+  const heartSection = document.getElementById("heartSection");
+
+  if (password === "0129") {
+    if (passwordSection && heartSection) {
+      passwordSection.style.display = "none";
+      heartSection.style.display = "block";
       loadCount();
       generateHearts();
     } else {
+      console.error("Не найдены секции пароля или сердца.");
+    }
+  } else {
+    if (errorMsg) errorMsg.innerText = "Пароль не верный";
+  }
+} else {
       document.getElementById("errorMsg").innerText = "Пароль не верный";
     }
   }
