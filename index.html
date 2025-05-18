@@ -136,8 +136,7 @@
 <div id="heartSection">
   <div class="heart-container" onclick="handleClick()">
     <svg viewBox="0 0 32 29.6" xmlns="http://www.w3.org/2000/svg" id="mainHeart">
-      <path d="M23.6,0c-3.4,0-6.4,2.1-7.6,5.1C14.8,2.1,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.6,16,21.2,16,21.2s16-11.6,16-21.2
-        C32,3.8,28.2,0,23.6,0z" fill="#fff0f5"/>
+      <path d="M23.6,0c-3.4,0-6.4,2.1-7.6,5.1C14.8,2.1,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.6,16,21.2,16,21.2s16-11.6,16-21.2C32,3.8,28.2,0,23.6,0z" fill="#fff0f5"/>
     </svg>
   </div>
   <div id="message">📬 Нажми на сердечко</div>
@@ -151,6 +150,7 @@
       <option value="counter">Счётчик</option>
       <option value="mainHeart">Сердечко</option>
       <option value="heartSection">Фон</option>
+      <option value="floatingHearts">Маленькие сердечки</option>
     </select>
     <input id="colorPicker" type="color">
     <button onclick="changeColor()">Изменить цвет</button>
@@ -166,15 +166,11 @@
     const passwordSection = document.getElementById("passwordSection");
     const heartSection = document.getElementById("heartSection");
 
-    if (password === "2901") {
-      if (passwordSection && heartSection) {
-        passwordSection.style.display = "none";
-        heartSection.style.display = "block";
-        loadCount();
-        generateHearts();
-      } else {
-        console.error("Не найдены секции пароля или сердца.");
-      }
+    if (password === "0129") {
+      passwordSection.style.display = "none";
+      heartSection.style.display = "block";
+      loadCount();
+      generateHearts();
     } else {
       if (errorMsg) errorMsg.innerText = "Пароль не верный";
     }
@@ -187,10 +183,11 @@
     "Милая",
     "Я тебя очень сильно люблю",
     "Ты самая лучшая на свете",
-    "Дорогая",
+    "Дорогая"
   ];
 
   const originalColors = {
+    floatingHearts: "pink",
     message: "#fff",
     counter: "#fff",
     mainHeart: "#fff0f5",
@@ -244,10 +241,15 @@
     const elementId = document.getElementById("elementSelect").value;
     const color = document.getElementById("colorPicker").value;
     const element = document.getElementById(elementId);
+
     if (elementId === "mainHeart") {
       element.querySelector("path").setAttribute("fill", color);
     } else if (elementId === "heartSection") {
-      element.style.backgroundColor = color;
+      document.body.style.backgroundColor = color;
+    } else if (elementId === "floatingHearts") {
+      const styleTag = document.createElement("style");
+      styleTag.innerHTML = `.floating-heart { background: ${color} !important; }`;
+      document.head.appendChild(styleTag);
     } else {
       element.style.color = color;
     }
@@ -257,10 +259,15 @@
     const elementId = document.getElementById("elementSelect").value;
     const defaultColor = originalColors[elementId];
     const element = document.getElementById(elementId);
+
     if (elementId === "mainHeart") {
       element.querySelector("path").setAttribute("fill", defaultColor);
     } else if (elementId === "heartSection") {
-      element.style.backgroundColor = defaultColor;
+      document.body.style.backgroundColor = defaultColor;
+    } else if (elementId === "floatingHearts") {
+      const styleTag = document.createElement("style");
+      styleTag.innerHTML = `.floating-heart { background: ${defaultColor} !important; }`;
+      document.head.appendChild(styleTag);
     } else {
       element.style.color = defaultColor;
     }
