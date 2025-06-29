@@ -19,14 +19,6 @@
       position: relative;
     }
 
-    #passwordSection, #heartSection {
-      display: none;
-    }
-
-    #passwordSection {
-      display: block;
-    }
-
     input[type="password"] {
       padding: 12px;
       font-size: 18px;
@@ -45,52 +37,121 @@
       border-radius: 20px;
       cursor: pointer;
       transition: background-color 0.3s;
-      text-decoration: none;
       color: white;
     }
 
     button:hover {
       background-color: #ff1493;
     }
+  </style>
+</head>
+<body>
+  <div id="passwordSection">
+    <h2 style="font-size: 24px; color: #fff;">Введите пароль</h2>
+    <input type="password" id="passwordInput" placeholder="Пароль">
+    <br>
+    <button onclick="checkPassword()">Войти</button>
+    <p id="errorMsg" style="color:white;"></p>
+  </div>
 
-    .heart-container {
-      width: 180px;
-      margin: 40px auto 10px;
-      cursor: pointer;
-      transition: transform 0.3s ease-in-out;
+  <div id="heartSection" style="display:none;">
+    <div class="heart-container" onclick="handleClick()">
+      <svg viewBox="0 0 32 29.6" xmlns="http://www.w3.org/2000/svg" id="mainHeart">
+        <path d="M23.6,0c-3.4,0-6.4,2.1-7.6,5.1C14.8,2.1,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.6,16,21.2,16,21.2s16-11.6,16-21.2C32,3.8,28.2,0,23.6,0z" fill="#fff0f5"/>
+      </svg>
+    </div>
+    <div id="message" style="color: white;">📬 Нажми на сердечко</div>
+    <div id="counter" style="color: white;"></div>
+    <button onclick="resetCounter()">Обнулить счётчик</button>
+  </div>
+
+  <script>
+    const messages = [
+      "Я тебя люблю ❤️",
+      "Ты моё солнце ☀️",
+      "С тобой навсегда 💖",
+      "Ты самая прекрасная 🌸",
+      "Ты — мой мир 🌍"
+    ];
+
+    function checkPassword() {
+      const input = document.getElementById("passwordInput");
+      const password = input ? input.value : "";
+      const errorMsg = document.getElementById("errorMsg");
+      const passwordSection = document.getElementById("passwordSection");
+      const heartSection = document.getElementById("heartSection");
+
+      if (password === "0710") {
+        passwordSection.style.display = "none";
+        heartSection.style.display = "block";
+        loadCount();
+        generateHearts();
+      } else if (password === "2901") {
+        passwordSection.style.display = "none";
+        document.body.innerHTML = `
+          <h1 style="color: white; font-size: 28px; text-align: center;">
+            Поздравляю с юбилеем, милая 💖
+          </h1>
+        `;
+      } else {
+        if (errorMsg) errorMsg.innerText = "Пароль не верный";
+      }
     }
 
-    .heart-container svg {
-      width: 100%;
-      height: 100%;
-      transition: transform 0.3s ease-in-out;
+    function handleClick() {
+      const messageDiv = document.getElementById("message");
+      const heart = document.getElementById("mainHeart");
+      const msg = messages[Math.floor(Math.random() * messages.length)];
+      messageDiv.innerText = msg;
+
+      heart.style.transform = "scale(1.4)";
+      setTimeout(() => {
+        heart.style.transform = "scale(1)";
+      }, 300);
+
+      incrementCount();
     }
 
-    #message {
-      font-size: 20px;
-      color: #fff;
-      margin-top: 15px;
+    function incrementCount() {
+      let count = parseInt(localStorage.getItem("heartCount") || "0");
+      count++;
+      localStorage.setItem("heartCount", count);
+      document.getElementById("counter").innerText = `Ты нажала ${count} раз(а) 💕`;
     }
 
-    #counter {
-      font-size: 16px;
-      color: #fff;
-      margin-top: 10px;
+    function loadCount() {
+      let count = parseInt(localStorage.getItem("heartCount") || "0");
+      document.getElementById("counter").innerText = `Ты нажала ${count} раз(а) 💕`;
     }
 
-    .floating-heart {
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      background: pink;
-      mask: url('data:image/svg+xml;utf8,<svg viewBox="0 0 32 29.6" xmlns="http://www.w3.org/2000/svg"><path d="M23.6,0c-3.4,0-6.4,2.1-7.6,5.1C14.8,2.1,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.6,16,21.2,16,21.2s16-11.6,16-21.2C32,3.8,28.2,0,23.6,0z"/></svg>') center/contain no-repeat;
-      animation: floatUp 8s ease-in forwards;
-      opacity: 0.5;
+    function resetCounter() {
+      localStorage.setItem("heartCount", "0");
+      document.getElementById("counter").innerText = "Ты нажала 0 раз(а) 💕";
     }
 
+    function generateHearts() {
+      setInterval(() => {
+        const heart = document.createElement("div");
+        heart.className = "floating-heart";
+        heart.style.position = "absolute";
+        heart.style.width = "20px";
+        heart.style.height = "20px";
+        heart.style.background = "pink";
+        heart.style.maskImage = "url('data:image/svg+xml;utf8,<svg viewBox=\\\"0 0 32 29.6\\\" xmlns=\\\"http://www.w3.org/2000/svg\\\"><path d=\\\"M23.6,0c-3.4,0-6.4,2.1-7.6,5.1C14.8,2.1,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.6,16,21.2,16,21.2s16-11.6,16-21.2C32,3.8,28.2,0,23.6,0z\\\"/></svg>')";
+        heart.style.maskSize = "cover";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.top = "100vh";
+        heart.style.animation = "floatUp 8s ease-in forwards";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 8000);
+      }, 350);
+    }
+  </script>
+
+  <style>
     @keyframes floatUp {
       0% {
-        transform: translateY(100vh) scale(0.5);
+        transform: translateY(0) scale(0.5);
         opacity: 0.5;
       }
       100% {
@@ -98,86 +159,6 @@
         opacity: 0;
       }
     }
-
-    .color-controls {
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 20px;
-      padding: 20px;
-      margin-top: 25px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      color: #fff;
-    }
-
-    .color-controls label,
-    .color-controls select,
-    .color-controls input,
-    .color-controls button {
-      margin: 5px;
-    }
-
-    .color-controls select,
-    .color-controls input[type="color"] {
-      padding: 5px;
-      border-radius: 8px;
-      border: 1px solid #fff;
-    }
   </style>
-</head>
-<body>
-
-<div id="passwordSection">
-  <h2 style="font-size: 24px; color: #fff;">Введите пароль</h2>
-  <input type="password" id="passwordInput" placeholder="Пароль">
-  <br>
-  <button onclick="checkPassword()">Войти</button>
-  <p id="errorMsg" style="color:white;"></p>
-</div>
-
-<div id="heartSection">
-  <div class="heart-container" onclick="handleClick()">
-    <svg viewBox="0 0 32 29.6" xmlns="http://www.w3.org/2000/svg" id="mainHeart">
-      <path d="M23.6,0c-3.4,0-6.4,2.1-7.6,5.1C14.8,2.1,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.6,16,21.2,16,21.2s16-11.6,16-21.2C32,3.8,28.2,0,23.6,0z" fill="#fff0f5"/>
-    </svg>
-  </div>
-  <div id="message">📬 Нажми на сердечко</div>
-  <div id="counter"></div>
-  <button onclick="resetCounter()">Обнулить счётчик</button>
-
-  <div class="color-controls">
-    <label for="elementSelect">Выбери элемент:</label><br>
-    <select id="elementSelect">
-      <option value="message">Сообщение</option>
-      <option value="counter">Счётчик</option>
-      <option value="mainHeart">Сердечко</option>
-      <option value="heartSection">Фон</option>
-      <option value="floatingHearts">Маленькие сердечки</option>
-    </select>
-    <input id="colorPicker" type="color">
-    <button onclick="changeColor()">Изменить цвет</button>
-    <button onclick="undoColor()">Отменить</button>
-  </div>
-</div>
-
-<script>
-  function checkPassword() {
-    const input = document.getElementById("passwordInput");
-    const password = input ? input.value : "";
-    const errorMsg = document.getElementById("errorMsg");
-    const passwordSection = document.getElementById("passwordSection");
-    const heartSection = document.getElementById("heartSection");
-
-    if (password === "0710") {
-      passwordSection.style.display = "none";
-      heartSection.style.display = "block";
-      loadCount();
-      generateHearts();
-    } else if (password === "2901") {
-      passwordSection.style.display = "none";
-      heartSection.innerHTML = '<h1 style="color: white; font-size: 24px; background: none;">Поздравляю с юбилеем, милая 💖</h1>';
-    } else {
-      if (errorMsg) errorMsg.innerText = "Пароль не верный";
-    }
-  }
-</script>
 </body>
 </html>
