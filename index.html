@@ -173,109 +173,11 @@
       generateHearts();
     } else if (password === "2901") {
       passwordSection.style.display = "none";
-      heartSection.innerHTML = '<h1 style="color: white; font-size: 24px;">Поздравляю с юбилеем, милая 💖</h1>';
+      heartSection.innerHTML = '<h1 style="color: white; font-size: 24px; background: none;">Поздравляю с юбилеем, милая 💖</h1>';
     } else {
       if (errorMsg) errorMsg.innerText = "Пароль не верный";
     }
   }
-
-  const messages = [
-    "Я тебя люблю ",
-    "Любимая ",
-    "Солнышко",
-    "Милая",
-    "Я тебя очень сильно люблю",
-    "Ты самая лучшая на свете",
-    "Дорогая"
-  ];
-
-  const originalColors = {
-    floatingHearts: "pink",
-    message: "#fff",
-    counter: "#fff",
-    mainHeart: "#fff0f5",
-    heartSection: "#ffb6c1"
-  };
-
-  function handleClick() {
-    const messageDiv = document.getElementById("message");
-    const heart = document.getElementById("mainHeart");
-    const msg = messages[Math.floor(Math.random() * messages.length)];
-    messageDiv.innerText = msg;
-
-    heart.style.transform = "scale(1.4)";
-    setTimeout(() => {
-      heart.style.transform = "scale(1)";
-    }, 300);
-
-    incrementCount();
-  }
-
-  function incrementCount() {
-    let count = parseInt(localStorage.getItem("heartCount") || "0");
-    count++;
-    localStorage.setItem("heartCount", count);
-    document.getElementById("counter").innerText = `Ты нажала ${count} раз(а) 💕`;
-  }
-
-  function loadCount() {
-    let count = parseInt(localStorage.getItem("heartCount") || "0");
-    document.getElementById("counter").innerText = `Ты нажала ${count} раз(а) 💕`;
-  }
-
-  function resetCounter() {
-    localStorage.setItem("heartCount", "0");
-    document.getElementById("counter").innerText = "Ты нажала 0 раз(а) 💕";
-  }
-
-  function generateHearts() {
-    setInterval(() => {
-      const heart = document.createElement("div");
-      heart.classList.add("floating-heart");
-      heart.style.left = Math.random() * 100 + "vw";
-      heart.style.animationDuration = (6 + Math.random() * 3) + "s";
-      heart.style.opacity = (0.3 + Math.random() * 0.5).toFixed(2);
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 10000);
-    }, 350);
-  }
-
-  function changeColor() {
-    const elementId = document.getElementById("elementSelect").value;
-    const color = document.getElementById("colorPicker").value;
-    const element = document.getElementById(elementId);
-
-    if (elementId === "mainHeart") {
-      element.querySelector("path").setAttribute("fill", color);
-    } else if (elementId === "heartSection") {
-      document.body.style.backgroundColor = color;
-    } else if (elementId === "floatingHearts") {
-      const styleTag = document.createElement("style");
-      styleTag.innerHTML = `.floating-heart { background: ${color} !important; }`;
-      document.head.appendChild(styleTag);
-    } else {
-      element.style.color = color;
-    }
-  }
-
-  function undoColor() {
-    const elementId = document.getElementById("elementSelect").value;
-    const defaultColor = originalColors[elementId];
-    const element = document.getElementById(elementId);
-
-    if (elementId === "mainHeart") {
-      element.querySelector("path").setAttribute("fill", defaultColor);
-    } else if (elementId === "heartSection") {
-      document.body.style.backgroundColor = defaultColor;
-    } else if (elementId === "floatingHearts") {
-      const styleTag = document.createElement("style");
-      styleTag.innerHTML = `.floating-heart { background: ${defaultColor} !important; }`;
-      document.head.appendChild(styleTag);
-    } else {
-      element.style.color = defaultColor;
-    }
-  }
 </script>
-
 </body>
 </html>
