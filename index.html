@@ -166,11 +166,14 @@
     const passwordSection = document.getElementById("passwordSection");
     const heartSection = document.getElementById("heartSection");
 
-    if (password === "2901") {
+    if (password === "0710") {
       passwordSection.style.display = "none";
       heartSection.style.display = "block";
       loadCount();
       generateHearts();
+    } else if (password === "2901") {
+      passwordSection.style.display = "none";
+      heartSection.innerHTML = '<h1 style="color: white; font-size: 24px;">Поздравляю с юбилеем, милая 💖</h1>';
     } else {
       if (errorMsg) errorMsg.innerText = "Пароль не верный";
     }
